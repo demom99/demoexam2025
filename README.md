@@ -1,4 +1,5 @@
 # *SA1-22demo2025*
+![image](https://github.com/Demomen-saveTF2/SA1-22demo2025/blob/main/topology.png)
 ## Задание 1
 
 ### Произведите базовую настройку устройств
