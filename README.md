@@ -490,18 +490,32 @@ wr mem
 
 Создаем процесс **OSPF**, указываем **идентификатор маршрутизатора**, объявляем сети и указываем **пассивные** интерфейсы:
 ```yml
+conf
 router ospf 1
-  router-id 1.1.1.1
-  network 172.16.0.0/30 area 0
-  network 192.168.100.0/26 area 0
-  network 192.168.200.0/28 area 0
-  passive-interface default
-  no passive-interface tunnel.0
+router-id 1.1.1.1
+network 172.16.0.0/30 area 0
+network 192.168.100.0/26 area 0
+network 192.168.200.0/28 area 0
+passive-interface default
+no passive-interface tunnel.0
+end
 ```
 
 <br/>
 
-#### Маршрутизация OSPF на BR-RTR настраивается аналогично примеру выше
+#### Настройка OSPF на BR-RTR
+Маршрутизация OSPF на BR-RTR настраивается аналогично, после нее можно произвести проверку OSPF-соседей:
+```yml
+conf
+router ospf 2
+router-id 2.2.2.2
+network 172.16.0.0/30 area 0
+network 192.168.0.0/25 area 0
+passive-interface default
+no passive-interface tunnel.0
+end
+sh ip ospf neighbor
+```
 
 </details>
 
@@ -523,54 +537,35 @@ router ospf 1
 
 #### Настройка NAT на ISP
 
-Добавляем правила **`iptables`** на ISP
+Скачиваем iptables, добавляем правила **`iptables`** на ISP, сохраняем их и включаем в автозагрузку. Перезагружаем:
 ```yml
-iptables -t nat -A POSTROUTING -o ens224 -s 172.16.4.0/28 -j MASQUERADE
-iptables -t nat -A POSTROUTING -o ens224 -s 172.16.5.0/28 -j MASQUERADE
-```
-
-<br/>
-
-Сохраняем правила:
-```yml
-iptables-save > /etc/sysconfig/iptables
-```
-
-<br/>
-
-Включаем и добавляем **`iptables`** в автозагрузку:
-```yml
+apt-get update
+apt-get install iptables
 systemctl enable --now iptables
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
+iptables-save -f /etc/sysconfig/iptables
+sysctl -p /etc/sysctl.conf
+systemctl restart iptables
 ```
 
 <br/>
 
 #### Настройка NAT на HQ-RTR
 
-Указываем **внутренние** и **внешние** интерфейсы:
+Указываем **внутренние** и **внешние** интерфейсы, создаем пул и **правило** трансляции адресов, указывая внешний интерфейс:
 ```yml
-int int1
-  ip nat inside
-!
-int int2
-  ip nat inside
-!
-int int0
-  ip nat outside
-```
-
-<br/>
-
-Создаем пул:
-```yml
-ip nat pool NAT_POOL 192.168.100.1-192.168.100.62,192.168.200.1-192.168.200.14
-```
-
-<br/>
-
-Создаем **правило** трансляции адресов, указывая внешний интерфейс:
-```yml
-ip nat source dynamic inside-to-outside pool NAT_POOL overload interface int0
+conf
+int ISP
+ip nat outside
+int VLAN100
+ip nat inside
+int VLAN200
+ip nat inside
+exit
+ip nat pool HQ 192.168.100.1-192.168.100.2,192.168.200.1-192.168.200.62
+ip nat source dynamic inside-to-outside pool HQ overload interface ISP
+wr mem
 ```
 
 <br/>
@@ -579,15 +574,15 @@ ip nat source dynamic inside-to-outside pool NAT_POOL overload interface int0
 
 Конфигурация:
 ```yml
-int int1
-  ip nat inside
-!
-int int0
-  ip nat outside
-!
-ip nat pool NAT_POOL 192.168.0.1-192.168.0.30
-!
-ip nat source dynamic inside-to-outside pool NAT_POOL overload interface int0
+conf
+int ISP
+ip nat outside
+int SRV
+ip nat inside
+exit
+ip nat pool BR 192.168.0.1-192.168.0.126
+ip nat source dynamic inside-to-outside pool BR overload interface ISP
+wr mem
 ```
 
 </details>
@@ -620,39 +615,30 @@ ip nat source dynamic inside-to-outside pool NAT_POOL overload interface int0
 <summary>Решение</summary>
 <br/>
 
-Создаем **пул** для **DHCP-сервера**:
+Создаем **пул** для **DHCP-сервера**, настраиваем и привязываем к интерфейсу:
 ```yml
-ip pool hq-cli 192.168.200.14-192.168.200.14
-```
-
-<br/>
-
-Настраиваем сам **DHCP-сервер**:
-```yml
+conf
+ip pool HQ-CLI 192.168.200.1-192.168.200.62
 dhcp-server 1
-  pool hq-cli 1
-    mask 28
-    gateway 192.168.200.1
-    dns 192.168.100.62
-    domain-name au-team.irpo
+pool HQ-CLI 1
+mask 26
+gateway 192.168.200.1
+dns 192.168.100.2
+domain-name au-team.irpo
+exit
+interface VLAN200
+dhcp-server 1
+exit
 ```
-> **`pool hq-cli 1`** - привязка **пула**
+> **`pool HQ-CLI 1`** - привязка **пула**
 
-> **`mask 28`** - указание **маски** для выдаваемых адресов из пула
+> **`mask 26`** - указание **маски** для выдаваемых адресов из пула
 
 > **`gateway 192.168.200.1`** - указание **шлюза по умолчанию** для клиентов
 
-> **`dns 192.168.100.62`** - указание **DNS-сервера** для клиентов
+> **`dns 192.168.100.2`** - указание **DNS-сервера** для клиентов
 
 > **`domain-name au-team.irpo`** - указание **DNS-суффикса** для офиса **HQ**
-
-<br/>
-
-Привязываем **DHCP-сервер** к интерфейсу (смотрящий в сторону **CLI**):
-```yml
-interface int2
-  dhcp-server 1
-```
 
 </details>
 
