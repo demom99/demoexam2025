@@ -299,7 +299,7 @@ ip route 0.0.0.0 0.0.0.0 *адрес шлюза*
 <summary>Решение</summary>
 <br/>
 
-#### Настройка интерфейса, который получает IP-адрес по DHCP
+#### Настройка внешнего интерфейса, IP-адрес получает по DHCP
 
 Файл **`options`** (в директории интерфейса) приводим к следующему виду:
 ```yml
@@ -310,10 +310,20 @@ CONFIG_IPV4=yes
 ```
 > **`BOOTPROTO=dhcp`** - заменили статический способ настройки адреса на динамическое получение
 
+```yml
+echo "BOOTPROTO=dhcp" > /etc/net/ifaces/ens33/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens33/options
+echo "NM_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens33/options
+echo "CONFIG_WIRELESS=no" >> /etc/net/ifaces/ens33/options
+echo "SYSTEMD_BOOTPROTO=dhcp4" >> /etc/net/ifaces/ens33/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens33/options
+echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
+```
 <br/>
 
 #### Настройка маршрута по умолчанию
-
+(мне кажется это не надо, он же по dhcp должен получить)
 Прописываем шлюз по умолчанию:
 ```yml
 default via *адрес шлюза*
