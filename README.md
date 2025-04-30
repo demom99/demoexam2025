@@ -387,6 +387,7 @@ conf
 username net_admin
 password P@$$word
 role admin
+wr mem
 ```
 
 </details>
@@ -499,6 +500,7 @@ network 192.168.200.0/28 area 0
 passive-interface default
 no passive-interface tunnel.0
 end
+wr mem
 ```
 
 <br/>
@@ -514,6 +516,7 @@ network 192.168.0.0/25 area 0
 passive-interface default
 no passive-interface tunnel.0
 end
+wr mem
 sh ip ospf neighbor
 ```
 
@@ -629,6 +632,7 @@ exit
 interface VLAN200
 dhcp-server 1
 exit
+wr mem
 ```
 > **`pool HQ-CLI 1`** - привязка **пула**
 
@@ -975,6 +979,7 @@ timedatectl status
 conf
 ntp timezone utc+5
 do show ntp timezone
+wr mem
 ```
 
 </details>
