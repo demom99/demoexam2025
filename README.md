@@ -417,7 +417,10 @@ default via *адрес шлюза*
 <br/>
 
 #### Настройка интерфейсов, смотрящих в сторону HQ-RTR и BR-RTR происходит в [Задании 1]()
-
+```yml
+echo "172.16.5.1/28" > etc/net/ifaces/ens34/ipv4address
+echo "172.16.4.1/28" > etc/net/ifaces/ens35/ipv4address
+```
 <br/>
 
 #### Включение маршрутизации
@@ -436,6 +439,25 @@ sysctl -p /etc/sysctl.conf
 
 </details>
 
+<br/>
+
+#### Настройка NAT на ISP
+
+Скачиваем iptables, добавляем правила **`iptables`** на ISP, сохраняем их и включаем в автозагрузку. Перезагружаем:
+```yml
+apt-get update
+apt-get install iptables
+systemctl enable --now iptables
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
+iptables-save -f /etc/sysconfig/iptables
+sysctl -p /etc/sysctl.conf
+systemctl restart iptables
+```
+> Если iptables не сохранилось, попробуйте следующую команду
+```yml
+iptables-save > /etc/sysconfig/iptables
+```
 <br/>
 
 ## Задание 3
@@ -634,21 +656,7 @@ sh ip ospf neighbor
 <summary>Решение</summary>
 <br/>
 
-#### Настройка NAT на ISP
 
-Скачиваем iptables, добавляем правила **`iptables`** на ISP, сохраняем их и включаем в автозагрузку. Перезагружаем:
-```yml
-apt-get update
-apt-get install iptables
-systemctl enable --now iptables
-iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
-iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
-iptables-save -f /etc/sysconfig/iptables
-sysctl -p /etc/sysctl.conf
-systemctl restart iptables
-```
-
-<br/>
 
 #### Настройка NAT на HQ-RTR
 
