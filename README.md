@@ -93,6 +93,7 @@ wr mem
 </table>
 
 
+> При создании интерфейсов на EcoRouter, называйте их соседними устройствами, так вам будет легче определить, что это за интерфейс
 <br/>
 <p align="center"><strong>Таблица адресации</strong></p>
 <table align="center">
@@ -124,32 +125,32 @@ wr mem
   </tr>
   <tr>
     <td align="center" rowspan="3">HQ-RTR</td>
-    <td align="center">int0</td>
+    <td align="center">HQ-RTR-ISP</td>
     <td align="center">172.16.4.2</td>
     <td align="center">/28</td>
     <td align="center">172.16.4.1</td>
   </tr>
   <tr>
-    <td align="center">int1</td>
+    <td align="center">HQ-RTR-SRV</td>
     <td align="center">192.168.100.1</td>
     <td align="center">/26</td>
     <td align="center"></td>
   </tr>
   <tr>
-    <td align="center">int2</td>
+    <td align="center">HQ-RTR-CLI</td>
     <td align="center">192.168.200.1</td>
     <td align="center">/28</td>
     <td align="center"></td>
   </tr>
   <tr>
     <td align="center" rowspan="2">BR-RTR</td>
-    <td align="center">int0</td>
+    <td align="center">BR-RTR-ISP</td>
     <td align="center">172.16.5.2</td>
     <td align="center">/28</td>
     <td align="center">172.16.5.1</td>
   </tr>
   <tr>
-    <td align="center">int1</td>
+    <td align="center">BR-RTR-SRV</td>
     <td align="center">192.168.0.1</td>
     <td align="center">/27</td>
     <td align="center"></td>
@@ -191,15 +192,36 @@ TYPE=eth
 BOOTPROTO=static
 CONFIG_IPV4=yes
 ```
+
+```yml
+echo "BOOTPROTO=static" > /etc/net/ifaces/ens33/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens33/options
+echo "CONFIG_WIRELESS=no" >> /etc/net/ifaces/ens33/options
+echo "SYSTEMD_BOOTPROTO=static" >> /etc/net/ifaces/ens33/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens33/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens33/options
+echo "NM_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
+echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
+```
 > **`options`**
+
 
 ```yml
 192.168.100.62/26
 ```
+
+```yml
+echo "<ip-адрес/маска>" > /etc/net/ifaces/ens33/ipv4address
+```
 > **`ipv4address`**
+
 
 ```yml
 default via 192.168.100.1
+```
+
+```yml
+echo "<default via адрес шлюза>" > /etc/net/ifaces/ens33/ipv4route
 ```
 > **`ipv4route`**
 
@@ -262,6 +284,37 @@ interface int1
 !
 interface int2
   connect port ge1 service-instance ge1/int2
+```
+
+```yml
+en
+conf
+int ISP
+ip address 172.16.4.2/28
+port ge0
+service-inst 0
+enc untagged
+conn ip int ISP
+exit
+
+int HQ-RTR-SRV
+ip address 192.168.100.1/26
+port ge1
+service-inst 100
+enc dot1q 100
+rewrite pop 1
+conn ip int HQ-RTR-SRV
+exit
+
+int HQ-RTR-CLI
+ip address 192.168.200.1/28
+port ge1
+service-inst 200
+enc dot1q 200
+rewrite pop 1
+conn ip int HQ-RTR-CLI
+end
+wr mem
 ```
 
 <br/>
