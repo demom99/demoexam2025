@@ -289,12 +289,12 @@ interface int2
 ```yml
 en
 conf
-int ISP
+int HQ-RTR-ISP
 ip address 172.16.4.2/28
 port ge0
 service-inst 0
 enc untagged
-conn ip int ISP
+conn ip int HQ-RTR-ISP
 exit
 
 int HQ-RTR-SRV
@@ -319,7 +319,27 @@ wr mem
 
 <br/>
 
-#### Адресация на BR-RTR (без разделения на VLAN) настраивается аналогично примеру выше
+#### Адресация на BR-RTR (без разделения на VLAN) 
+```yml
+en
+conf
+int BR-RTR-ISP
+ip address 172.16.5.2/28
+port ge0
+service-inst 0
+enc untagged
+conn ip int BR-RTR-ISP
+exit
+
+int BR-RTR-SRV
+ip address 192.168.0.1/27
+port ge1
+service-inst 0
+enc untagged
+conn ip int  BR-RTR-SRV
+end
+wr mem
+```
 
 <br/>
 
@@ -329,7 +349,15 @@ wr mem
 ```yml
 ip route 0.0.0.0 0.0.0.0 *адрес шлюза*
 ```
+HQ-RTR
+```yml
+ip route 0.0.0.0 0.0.0.0 *172.16.4.1*
+```
 
+BR-RTR
+```yml
+ip route 0.0.0.0 0.0.0.0 *172.16.5.1*
+```
 </details>
 
 <br/>
