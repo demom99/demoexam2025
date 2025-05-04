@@ -231,63 +231,7 @@ echo "<default via адрес шлюза>" > /etc/net/ifaces/ens33/ipv4route
 
 #### Настройка IP-адресации на EcoRouter
 
-Настраиваем интерфейс на **HQ-RTR**, который смотрит в сторону **ISP**:
-
-- Создаем логический интерфейс:
-```yml
-interface int0
-  description "to isp"
-  ip address 172.16.4.2/28
-```
-
-- Настраиваем физический порт:
-```yml
-port ge0
-  service-instance ge0/int0
-    encapsulation untagged
-```
-
-- Объединеняем порт с интерфейсом:
-```yml
-interface int0
-  connect port ge0 service-instance ge0/int0
-```
-
-<br/>
-
-Настраиваем интерфейсы на **HQ-RTR**, которые смотрят в сторону **HQ-SRV** и **HQ-CLI** (с разделением на VLAN):
-
-- Создаем два интерфейса:
-```yml
-interface int1
-  description "to hq-srv"
-  ip address 192.168.100.1/26
-!
-interface int2
-  description "to hq-cli"
-  ip address 192.168.200.1/28
-```
-
-- Настраиваем порт:
-```yml
-port ge1
-  service-instance ge1/int1
-    encapsulation dot1q 100
-    rewrite pop 1
-  service-instance ge1/int2
-    encapsulation dot1q 200
-    rewrite pop 1
-```
-
-- Объединяем порт с интерфейсами:
-```yml
-interface int1
-  connect port ge1 service-instance ge1/int1
-!
-interface int2
-  connect port ge1 service-instance ge1/int2
-```
-
+##### Адресация на HQ-RTR (с разделением на VLAN) 
 ```yml
 en
 conf
@@ -318,10 +262,9 @@ conn ip int HQ-RTR-CLI
 end
 wr mem
 ```
-
 <br/>
 
-#### Адресация на BR-RTR (без разделения на VLAN) 
+##### Адресация на BR-RTR (без разделения на VLAN) 
 ```yml
 en
 conf
@@ -342,7 +285,6 @@ conn ip int  BR-RTR-SRV
 end
 wr mem
 ```
-
 <br/>
 
 #### Добавление маршрута по умолчанию в EcoRouter
