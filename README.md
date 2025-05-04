@@ -413,9 +413,9 @@ echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
 (мне кажется это не надо, он же по dhcp должен получить)
 Прописываем шлюз по умолчанию:
 ```yml
-default via *адрес шлюза*
+echo "<default via *адрес шлюза*>" > /etc/net/ifaces/ens33/ipv4route
 ```
-
+> **`ipv4route`**
 <br/>
 
 #### Настройка интерфейсов, смотрящих в сторону HQ-RTR и BR-RTR происходит в [Задании 1]()
@@ -427,7 +427,10 @@ echo "172.16.4.1/28" > etc/net/ifaces/ens35/ipv4address
 
 #### Включение маршрутизации
 
-В файле **`/etc/net/sysctl.conf`** изменяем строку (0 меняем на 1):
+В файле **`/etc/net/sysctl.conf`**изменяем строку (0 меняем на 1):
+```yml
+mcedit /etc/net/sysctl.conf
+```
 ```yml
 net.ipv4.ip_forward = 1
 ```
@@ -439,28 +442,28 @@ net.ipv4.ip_forward = 1
 sysctl -p /etc/sysctl.conf
 ```
 
-</details>
-
 <br/>
 
-#### Настройка NAT на ISP
+##### Настройка NAT на ISP
 
 Скачиваем iptables, добавляем правила **`iptables`** на ISP, сохраняем их и включаем в автозагрузку. Перезагружаем:
+> -o ens33 &mdash; указываем **выходной** интерфейс
 ```yml
 apt-get update
 apt-get install iptables
 systemctl enable --now iptables
-iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
-iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
+iptables -t nat -A POSTROUTING -o ens33 -j MASQUERADE -s 172.16.4.0/28
+iptables -t nat -A POSTROUTING -o ens33 -j MASQUERADE -s 172.16.5.0/28
 iptables-save -f /etc/sysconfig/iptables
 sysctl -p /etc/sysctl.conf
 systemctl restart iptables
 ```
-> Если iptables не сохранилось, попробуйте следующую команду
+> Если iptables не сохранилось, попробуйте следующую команду:
 ```yml
 iptables-save > /etc/sysconfig/iptables
 ```
 <br/>
+</details>
 
 ## Задание 3
 
@@ -507,6 +510,7 @@ conf
 username net_admin
 password P@$$word
 role admin
+end
 wr mem
 ```
 
