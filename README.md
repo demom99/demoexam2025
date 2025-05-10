@@ -145,6 +145,12 @@ wr mem
     <td align="center"></td>
   </tr>
   <tr>
+    <td align="center">MGMT-VLAN</td>
+    <td align="center">192.168.99.1</td>
+    <td align="center">/28</td>
+    <td align="center"></td>
+  </tr>
+  <tr>
     <td align="center" rowspan="2">BR-RTR</td>
     <td align="center">BR-RTR-ISP</td>
     <td align="center">172.16.5.2</td>
