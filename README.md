@@ -108,19 +108,19 @@ wr mem
   </tr>
   <tr>
     <td align="center" rowspan="3">ISP</td>
-    <td align="center">ens33</td>
+    <td align="center">ens18</td>
     <td align="center">10.12.28.5 (DHCP)</td>
     <td align="center">/24</td>
     <td align="center">10.12.28.254</td>
   </tr>
   <tr>
-    <td align="center">ens34</td>
+    <td align="center">ens19</td>
     <td align="center">172.16.5.1</td>
     <td align="center">/28</td>
     <td align="center"></td>
   </tr>
   <tr>
-    <td align="center">ens35</td>
+    <td align="center">ens20</td>
     <td align="center">172.16.4.1</td>
     <td align="center">/28</td>
     <td align="center"></td>
@@ -337,38 +337,29 @@ ip route 0.0.0.0 0.0.0.0 172.16.5.1
 
 Файл **`options`** (в директории интерфейса) приводим к следующему виду:
 ```yml
-BOOTPROTO=dhcp
-TYPE=eth
-DISABLED=no
-CONFIG_IPV4=yes
+echo "BOOTPROTO=dhcp" > /etc/net/ifaces/ens18/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens18/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens18/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens18/options
+systemctl restart network
 ```
-> **`BOOTPROTO=dhcp`** - заменили статический способ настройки адреса на динамическое получение
-
-```yml
-echo "BOOTPROTO=dhcp" > /etc/net/ifaces/ens33/options
-echo "TYPE=eth" >> /etc/net/ifaces/ens33/options
-echo "NM_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
-echo "DISABLED=no" >> /etc/net/ifaces/ens33/options
-echo "CONFIG_WIRELESS=no" >> /etc/net/ifaces/ens33/options
-echo "SYSTEMD_BOOTPROTO=dhcp4" >> /etc/net/ifaces/ens33/options
-echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens33/options
-echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
-```
-<br/>
-
-#### Настройка маршрута по умолчанию
-(мне кажется это не надо, он же по dhcp должен получить)
-Прописываем шлюз по умолчанию:
-```yml
-echo "<default via *адрес шлюза*>" > /etc/net/ifaces/ens33/ipv4route
-```
-> **`ipv4route`**
 <br/>
 
 #### Настройка интерфейсов, смотрящих в сторону HQ-RTR и BR-RTR происходит в [Задании 1]()
 ```yml
-echo "172.16.5.1/28" > etc/net/ifaces/ens34/ipv4address
-echo "172.16.4.1/28" > etc/net/ifaces/ens35/ipv4address
+mkdir /etc/net/ifaces/ens19
+echo "172.16.4.1/28" > /etc/net/ifaces/ens19/ipv4address
+echo "BOOTPROTO=static" > /etc/net/ifaces/ens19/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens19/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens19/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens19/options
+mkdir /etc/net/ifaces/ens20
+echo "172.16.5.1/28" > /etc/net/ifaces/ens20/ipv4address
+echo "BOOTPROTO=dhcp" > /etc/net/ifaces/ens20/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens20/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens20/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens20/options
+systemctl restart network
 ```
 <br/>
 
@@ -384,14 +375,7 @@ net.ipv4.ip_forward = 1
 
 <br/>
 
-Изменения в файле **`sysctl.conf`** применяем следующей командой:
-```yml
-sysctl -p /etc/sysctl.conf
-```
-
-<br/>
-
-##### Настройка NAT на ISP
+##### Включение маршрутизации и настройка NAT на ISP
 
 Скачиваем iptables, добавляем правила **`iptables`** на ISP, сохраняем их и включаем в автозагрузку. Перезагружаем:
 > -o ens33 &mdash; указываем **выходной** интерфейс
@@ -399,15 +383,20 @@ sysctl -p /etc/sysctl.conf
 apt-get update
 apt-get install iptables
 systemctl enable --now iptables
-iptables -t nat -A POSTROUTING -o ens33 -j MASQUERADE -s 172.16.4.0/28
-iptables -t nat -A POSTROUTING -o ens33 -j MASQUERADE -s 172.16.5.0/28
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
+iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
 iptables-save -f /etc/sysconfig/iptables
-sysctl -p /etc/sysctl.conf
-systemctl restart iptables
 ```
-> Если iptables не сохранилось, попробуйте следующую команду:
+В файле **`/etc/net/sysctl.conf`**изменяем строку (0 меняем на 1):
 ```yml
-iptables-save > /etc/sysconfig/iptables
+mcedit /etc/net/sysctl.conf
+```
+```yml
+net.ipv4.ip_forward = 1
+```
+Перезагружаем iptables:
+```yml
+systemctl restart iptables
 ```
 <br/>
 </details>
