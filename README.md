@@ -583,7 +583,7 @@ conf
 router ospf 2
 router-id 2.2.2.2
 network 172.16.0.0/30 area 0
-network 192.168.0.0/25 area 0
+network 192.168.0.0/27 area 0
 passive-interface default
 no passive-interface tunnel.0
 end
@@ -635,12 +635,12 @@ wr mem
 Конфигурация:
 ```yml
 conf
-int ISP
+int BR-ISP
 ip nat outside
-int SRV
+int BR-SRV
 ip nat inside
 exit
-ip nat pool BR 192.168.0.1-192.168.0.126
+ip nat pool BR 192.168.0.1-192.168.0.30
 ip nat source dynamic inside-to-outside pool BR overload interface ISP
 wr mem
 ```
