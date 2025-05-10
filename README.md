@@ -160,21 +160,21 @@ wr mem
   <tr>
     <td align="center">HQ-SRV</td>
     <td align="center">ens33</td>
-    <td align="center">192.168.100.62</td>
+    <td align="center">192.168.100.2</td>
     <td align="center">/26</td>
     <td align="center">192.168.100.1</td>
   </tr>
   <tr>
     <td align="center">BR-SRV</td>
     <td align="center">ens33</td>
-    <td align="center">192.168.0.30</td>
+    <td align="center">192.168.0.2</td>
     <td align="center">/27</td>
     <td align="center">192.168.0.1</td>
   </tr>
   <tr>
     <td align="center">HQ-CLI</td>
     <td align="center">ens33</td>
-    <td align="center">192.168.200.14</td>
+    <td align="center">192.168.200.2</td>
     <td align="center">/28</td>
     <td align="center">192.168.200.1</td>
   </tr>
