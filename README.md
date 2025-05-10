@@ -126,7 +126,7 @@ wr mem
     <td align="center"></td>
   </tr>
   <tr>
-    <td align="center" rowspan="3">HQ-RTR</td>
+    <td align="center" rowspan="4">HQ-RTR</td>
     <td align="center">HQ-RTR-ISP</td>
     <td align="center">172.16.4.2</td>
     <td align="center">/28</td>
