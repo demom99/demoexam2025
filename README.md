@@ -1017,6 +1017,7 @@ timedatectl status
 conf
 ntp timezone utc+5
 do show ntp timezone
+end
 wr mem
 ```
 
