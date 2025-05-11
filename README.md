@@ -667,7 +667,7 @@ gateway 192.168.200.1
 dns 192.168.100.2
 domain-name au-team.irpo
 exit
-interface VLAN200
+interface HQ-RTR-CLI
 dhcp-server 1
 exit
 wr mem
