@@ -363,17 +363,6 @@ systemctl restart network
 ```
 <br/>
 
-#### Включение маршрутизации
-
-В файле **`/etc/net/sysctl.conf`**изменяем строку (0 меняем на 1):
-```yml
-mcedit /etc/net/sysctl.conf
-```
-```yml
-net.ipv4.ip_forward = 1
-```
-
-<br/>
 
 ##### Включение маршрутизации и настройка NAT на ISP
 
@@ -387,6 +376,7 @@ iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
 iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
 iptables-save -f /etc/sysconfig/iptables
 ```
+#### Включение маршрутизации
 В файле **`/etc/net/sysctl.conf`**изменяем строку (0 меняем на 1):
 ```yml
 mcedit /etc/net/sysctl.conf
