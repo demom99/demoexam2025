@@ -229,7 +229,7 @@ default via 192.168.100.1
 ```
 
 ```yml
-echo "<default via адрес шлюза>" > /etc/net/ifaces/ens33/ipv4route
+echo "default via <адрес шлюза>" > /etc/net/ifaces/ens33/ipv4route
 ```
 > **`ipv4route`**
 
