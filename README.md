@@ -669,7 +669,7 @@ domain-name au-team.irpo
 exit
 interface HQ-RTR-CLI
 dhcp-server 1
-exit
+end
 wr mem
 ```
 > **`pool HQ-CLI 1`** - привязка **пула**
