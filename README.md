@@ -595,11 +595,11 @@ sh ip ospf neighbor
 Указываем **внутренние** и **внешние** интерфейсы, создаем пул и **правило** трансляции адресов, указывая внешний интерфейс:
 ```yml
 conf
-int ISP
+int HQ-RTR-ISP
 ip nat outside
-int VLAN100
+int HQ-RTR-CLI
 ip nat inside
-int VLAN200
+int HQ-RTR-SRV
 ip nat inside
 exit
 ip nat pool HQ 192.168.100.1-192.168.100.2,192.168.200.1-192.168.200.62
@@ -614,9 +614,9 @@ wr mem
 Конфигурация:
 ```yml
 conf
-int BR-ISP
+int BR-RTR-ISP
 ip nat outside
-int BR-SRV
+int BR-RTR-SRV
 ip nat inside
 exit
 ip nat pool BR 192.168.0.1-192.168.0.30
