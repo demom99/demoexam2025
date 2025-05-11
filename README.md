@@ -355,7 +355,7 @@ echo "DISABLED=no" >> /etc/net/ifaces/ens19/options
 echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens19/options
 mkdir /etc/net/ifaces/ens20
 echo "172.16.5.1/28" > /etc/net/ifaces/ens20/ipv4address
-echo "BOOTPROTO=dhcp" > /etc/net/ifaces/ens20/options
+echo "BOOTPROTO=static" > /etc/net/ifaces/ens20/options
 echo "TYPE=eth" >> /etc/net/ifaces/ens20/options
 echo "DISABLED=no" >> /etc/net/ifaces/ens20/options
 echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens20/options
