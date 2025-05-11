@@ -243,7 +243,7 @@ en
 conf
 int HQ-RTR-ISP
 ip address 172.16.4.2/28
-port ge0
+port te0
 service-inst 0
 enc untagged
 conn ip int HQ-RTR-ISP
@@ -251,7 +251,7 @@ exit
 
 int HQ-RTR-SRV
 ip address 192.168.100.1/26
-port ge1
+port te1
 service-inst 100
 enc dot1q 100
 rewrite pop 1
@@ -260,7 +260,7 @@ exit
 
 int HQ-RTR-CLI
 ip address 192.168.200.1/28
-port ge1
+port te1
 service-inst 200
 enc dot1q 200
 rewrite pop 1
@@ -276,7 +276,7 @@ en
 conf
 int BR-RTR-ISP
 ip address 172.16.5.2/28
-port ge0
+port te0
 service-inst 0
 enc untagged
 conn ip int BR-RTR-ISP
@@ -284,7 +284,7 @@ exit
 
 int BR-RTR-SRV
 ip address 192.168.0.1/27
-port ge1
+port te1
 service-inst 0
 enc untagged
 conn ip int  BR-RTR-SRV
