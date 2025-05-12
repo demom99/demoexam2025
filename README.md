@@ -266,6 +266,15 @@ enc dot1q 200
 rewrite pop 1
 conn ip int HQ-RTR-CLI
 end
+
+int VLAN999
+ip address 192.168.99.1/29
+port te1
+service-inst 999
+enc dot1q 999
+rewrite pop 1
+conn ip int VLAN999
+end
 wr mem
 ```
 <br/>
