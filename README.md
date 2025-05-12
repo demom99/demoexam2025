@@ -716,10 +716,34 @@ wr mem
 <summary>Решение</summary>
 <br/>
 
+<br/>
+
+<p align="center"><strong>Таблица динамической маршрутизации OSPF</strong></p>
+<table align="center">
+  <tr>
+    <td align="center">Подсеть и пул адресов</td>
+    <td align="center">DHCP-сервер</td>
+    <td align="center">DHCP-клиент</td>
+    <td align="center">DNS-сервер</td>
+    <td align="center">DNS-суффикс</td>
+    <td align="center">Шлюз по умолчанию</td>
+  </tr>
+  <tr>
+    <td align="center">192.168.200.0/28, 192.168.200.1-192.168.200.14</td>
+    <td align="center">192.168.200.1 (HQ-RTR)</td>
+    <td align="center">192.168.200.2 (HQ-CLI)</td>
+    <td align="center">192.168.100.2 (HQ-SRV)</td>
+    <td align="center">au-team.irpo</td>
+    <td align="center">192.168.200.1</td>
+  </tr>
+</table>
+
+<br/>
+
 Создаем **пул** для **DHCP-сервера**, настраиваем и привязываем к интерфейсу:
 ```yml
 conf
-ip pool HQ-CLI 192.168.200.1-192.168.200.62
+ip pool HQ-CLI 192.168.200.1-192.168.200.14
 dhcp-server 1
 pool HQ-CLI 1
 mask 26
