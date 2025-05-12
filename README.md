@@ -379,7 +379,7 @@ systemctl restart network
 > -o ens33 &mdash; указываем **выходной** интерфейс
 ```yml
 apt-get update
-apt-get install iptables
+apt-get install iptables -y
 systemctl enable --now iptables
 iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.4.0/28
 iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE -s 172.16.5.0/28
