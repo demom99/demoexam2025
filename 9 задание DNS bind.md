@@ -135,7 +135,8 @@ $TTL	1D
 			)
 		IN	NS	hq-srv.
 		IN	NS	hq-srv.au-team.irpo.
-1.0	IN	PTR	br-srv.au-team.irpo.
+1.0	IN	PTR	br-rtr.au-team.irpo.
+2.0	IN	PTR	br-srv.au-team.irpo.
 1.100	IN	PTR	hq-rtr.au-team.irpo.
 1.200	IN	PTR	hq-rtr.au-team.irpo.
 1.99	IN	PTR	hq-rtr.au-team.irpo.
