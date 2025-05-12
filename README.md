@@ -521,6 +521,7 @@ systemctl restart sshd
     <td align="center">172.16.0.2</td>
     <td align="center">/30</td>
   </tr>
+</table>
 
 <br/>
 
