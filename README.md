@@ -396,6 +396,7 @@ net.ipv4.ip_forward = 1
 Перезагружаем iptables:
 ```yml
 systemctl restart iptables
+sysctl -p /etc/net/sysctl.conf
 ```
 <br/>
 </details>
