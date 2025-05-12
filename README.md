@@ -753,8 +753,6 @@ wr mem
 
 <p align="center"><strong>Таблица 2</strong></p>
 
-<br/>
-
 <details>
 <summary>Решение</summary>
 <br/>
@@ -765,8 +763,6 @@ wr mem
 ```yml
 apt-get install -y bind bind-utils
 ```
-
-<br/>
 
 Изменяем содержание перечисленных строк в **`/etc/bind/options.conf`** к следующему виду:
 ```yml
