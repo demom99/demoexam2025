@@ -521,7 +521,9 @@ systemctl restart sshd
     <td align="center">172.16.0.2</td>
     <td align="center">/30</td>
   </tr>
-  
+
+<br/>
+
 #### Создание туннеля на HQ-RTR
 
 Создаем интерфейс **GRE**-туннеля на **HQ-RTR**, назначаем ему IP-адрес и выставляем mtu. Генерируем туннель:
