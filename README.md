@@ -718,7 +718,7 @@ wr mem
 
 <br/>
 
-<p align="center"><strong>Таблица динамической маршрутизации OSPF</strong></p>
+<p align="center"><strong>Таблица DHCP</strong></p>
 <table align="center">
   <tr>
     <td align="center">Подсеть и пул адресов</td>
