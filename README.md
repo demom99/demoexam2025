@@ -759,149 +759,19 @@ wr mem
 
 #### Настройка конфигурации bind
 
-Устанавливаем необходимые пакеты:
+Временно выставляем dns для HQ-SRV (потом удаляем!), устанавливаем необходимые пакеты:
 ```yml
-apt-get install -y bind bind-utils
-```
-
-Изменяем содержание перечисленных строк в **`/etc/bind/options.conf`** к следующему виду:
-```yml
-listen-on { 127.0.0.1; 192.168.100.62; };
-
-forwarders { 77.88.8.8; };
-
-allow-query { 192.168.100.0/26; 192.168.200.0/28; 192.168.0.0/27; };
-
-```
-> **`listen-on`** - сетевые интерфейсы, которые будет прослушивать служба
->
-> **`forwarders`** - DNS-сервер, на который будут перенаправляться запросы клиентов
->
-> **`allow-query`** - IP-адреса и подсети от которых будут обрабатываться запросы
-
-<br/>
-
-Конфигурируем ключи **rndc**:
-```yml
-rndc-confgen > /etc/rndckey
-```
-> Делаем вывод в файл, чтобы скопировать оттуда
-
-<br/>
-
-Приводим файл **`/etc/bind/rndc.key`** к следующему виду:
-```yml
-//key "rndc-key" {
-//  secret "@RNDC_KEY@";
-//};
-
-key "rndc-key" {
-  algorithm hmac-sha256;
-  secret "VTmhjyXFDo0QpaBl3UQWx1e0g9HElS2MiFDtNQzDylo=";
-};
-```
-> Первые строки закомментировали
->
-> Вставили ключ **rndc**
-
-<br/>
-
-Проверяем на ошибки:
-```yml
-named-checkconf
-```
-
-<br/>
-
-Запускаем и добавляем в автозагрузку **`bind`**:
-```yml
-systemctl enable --now bind
-```
-
-<br/>
-
-Изменяем **`resolv.conf`** интерфейса:
-```yml
-search au-team.irpo
-nameserver 127.0.0.1
-nameserver 192.168.100.62
-nameserver 77.88.8.8
-search yandex.ru
-```
-
-<br/>
-
-### Настройка DNS для офисов HQ и BR
-
-- Основной DNS-сервер реализован на HQ-SRV.
-
-- Сервер должен обеспечивать разрешение имён в сетевые адреса устройств и обратно в соответствии с таблицей 2
-
-- В качестве DNS сервера пересылки используйте любой общедоступный DNS сервер
-
-<br/>
-
-<table align="center">
-  <tr>
-    <td align="center">Устройство</td>
-    <td align="center">Запись</td>
-    <td align="center">Тип</td>
-  </tr>
-  <tr>
-    <td align="center">HQ-RTR</td>
-    <td align="center">hq-rtr.au-team.irpo</td>
-    <td align="center">A,PTR</td>
-  </tr>
-  <tr>
-    <td align="center">BR-RTR</td>
-    <td align="center">br-rtr.au-team.irpo</td>
-    <td align="center">A</td>
-  </tr>
-  <tr>
-    <td align="center">HQ-SRV</td>
-    <td align="center">hq-srv.au-team.irpo</td>
-    <td align="center">A,PTR</td>
-  </tr>
-  <tr>
-    <td align="center">HQ-CLI</td>
-    <td align="center">hq-cli.au-team.irpo</td>
-    <td align="center">A,PTR</td>
-  </tr>
-  <tr>
-    <td align="center">BR-SRV</td>
-    <td align="center">br-srv.au-team.irpo</td>
-    <td align="center">A</td>
-  </tr>
-  <tr>
-    <td align="center">HQ-RTR</td>
-    <td align="center">moodle.au-team.irpo</td>
-    <td align="center">CNAME</td>
-  </tr>
-  <tr>
-    <td align="center">BR-RTR</td>
-    <td align="center">wiki.au-team.irpo</td>
-    <td align="center">CNAME</td>
-  </tr>
-</table>
-
-<p align="center"><strong>Таблица 2</strong></p>
-
-<br/>
-
-<details>
-<summary>Решение</summary>
-<br/>
-
-#### Настройка конфигурации bind
-Устанавливаем необходимые пакеты:
-```yml
+echo "nameserver 8.8.8.8" > /etc/net/ifaces/ens18/resolv.conf
+systemctl restart network
+apt-get update
+apt-get install -y nano
 apt-get install -y bind bind-utils
 ```
 
 **Настраиваем файл `/etc/bind/options.conf` на HQ-SRV**
 ```bash
-Listen-on {127.0.0.1; any; };
-Listen-on-v6 { ::1; };
+listen-on {127.0.0.1; any; };
+listen-on-v6 { ::1; };
 
 forwarders { 8.8.8.8; };
 
@@ -914,8 +784,9 @@ allow-recursion { any; };
 
 **Редактируем файл `etc/net/ifaces/ens18/resolv.conf` на HQ-SRV**
 ```yml
-domain au-team.irpo
-nameserver 127.0.0.1
+echo "domain au-team.irpo" > /etc/net/ifaces/ens18/resolv.conf
+echo "nameserver 127.0.0.1" >> /etc/net/ifaces/ens18/resolv.conf
+systemctl restart network
 ```
 <br/>
 
