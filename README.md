@@ -265,7 +265,7 @@ service-inst 200
 enc dot1q 200
 rewrite pop 1
 conn ip int HQ-RTR-CLI
-end
+exit
 
 int VLAN999
 ip address 192.168.99.1/29
