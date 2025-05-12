@@ -160,17 +160,17 @@ chmod 755 168.192.in-addr.arpa
 cd /etc/bind/zone
 rndc-confgen > /etc/rndckey
 ```
-### !!!Не забываем все сохранить!!!
+### Не забываем все сохранить
 ```bash
 systemctl restart network
 systemctl restart bind
 ```
 
 **Проверяем с помощью команды:**
-```bash
+```yml
 nslookup moodle
-
+```
 или 
-
+```yml
 ping moodle
 ```
