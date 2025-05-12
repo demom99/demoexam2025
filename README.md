@@ -573,6 +573,30 @@ wr mem
 <summary>Решение</summary>
 <br/>
 
+<p align="center"><strong>Таблица динамической маршрутизации OSPF</strong></p>
+<table align="center">
+  <tr>
+    <td align="center">Устройство</td>
+    <td align="center">Router ID</td>
+    <td align="center">OSPF Neighbour</td>
+    <td align="center">Сети</td>
+  </tr>
+  <tr>
+    <td align="center">HQ-RTR</td>
+    <td align="center">1.1.1.1</td>
+    <td align="center">2.2.2.2</td>
+    <td align="center">172.16.0.0/30, 192.168.100.0/26, 192.168.200.0/28</td>
+  </tr>
+  <tr>
+    <td align="center">BR-RTR</td>
+    <td align="center">2.2.2.2</td>
+    <td align="center">1.1.1.1</td>
+    <td align="center">172.16.0.0/30, 192.168.0.0/27</td>
+  </tr>
+</table>
+
+<br/>
+
 #### Настройка OSPF на HQ-RTR
 
 Создаем процесс **OSPF**, указываем **идентификатор маршрутизатора**, объявляем сети и указываем **пассивные** интерфейсы:
