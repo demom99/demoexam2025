@@ -612,7 +612,7 @@ ip nat inside
 int HQ-RTR-SRV
 ip nat inside
 exit
-ip nat pool HQ 192.168.100.1-192.168.100.2,192.168.200.1-192.168.200.62
+ip nat pool HQ 192.168.100.1-192.168.100.62,192.168.200.1-192.168.200.14
 ip nat source dynamic inside-to-outside pool HQ overload interface HQ-RTR-ISP
 end
 wr mem
