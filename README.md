@@ -921,6 +921,7 @@ allow-recursion { any; };
 domain au-team.irpo
 nameserver 127.0.0.1
 ```
+<br/>
 
 **Прописываем зоны, в файле `/etc/bind/local.conf`**
 ```yml
@@ -994,7 +995,7 @@ chmod 755 168.192.in-addr.arpa
 cd /etc/bind/zone
 rndc-confgen > /etc/rndckey
 ```
-### Не забываем все сохранить
+**Не забываем все сохранить:**
 ```yml
 systemctl restart network
 systemctl restart bind
