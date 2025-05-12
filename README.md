@@ -515,7 +515,6 @@ systemctl restart sshd
     <td align="center">/30</td>
   </tr>
   <tr>
-    <td align="center" rowspan="2">GRE</td>
     <td align="center">BR-RTR</td>
     <td align="center">tunnel.0</td>
     <td align="center">172.16.0.2</td>
