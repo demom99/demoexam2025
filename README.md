@@ -865,22 +865,24 @@ chmod 600 /etc/bind/zone/au-team.irpo.db
 Приводим его к следующему виду:
 ```yml
 $TTL    1D
-@       IN      SOA     au-team.irpo. root.au-team.irpo. (
-                                2024102200      ; serial
-                                12H             ; refresh
-                                1H              ; retry
-                                1W              ; expire
-                                1H              ; ncache
-                        )
-        IN      NS      au-team.irpo.
-        IN      A       192.168.100.62
-hq-rtr  IN      A       192.168.100.1
-br-rtr  IN      A       192.168.0.1
-hq-srv  IN      A       192.168.100.62
-hq-cli  IN      A       192.168.200.14
-br-srv  IN      A       192.168.0.30
-moodle  IN      CNAME   hq-rtr
-wiki    IN      CNAME   hq-rtr
+@       IN    SOA    hq-srv    root.hq-srv (
+                                2025020600	; serial
+                                12H        ; refresh
+                                1H		; retry
+                                1W		; expire
+                                1H		; ncache
+)
+	IN	NS	hq-srv
+		MX 10	hq-srv
+hq-srv		A	192.168.100.2
+hq-rtr		A	192.168.100.1
+hq-rtr		A	192.168.200.1
+hq-rtr		A	192.168.99.1
+br-rtr		A	192.168.0.1
+hq-cli		A	192.168.200.2
+br-srv		A	192.168.0.2
+moodle		CNAME	hq-rtr
+wiki		CNAME	hq-rtr
 ```
 
 <br/>
