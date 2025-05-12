@@ -498,6 +498,30 @@ systemctl restart sshd
 <summary>Решение</summary>
 <br/>
 
+<p align="center"><strong>Таблица туннеля GRE</strong></p>
+<table align="center">
+  <tr>
+    <td align="center">Технология</td>
+    <td align="center">Устройство</td>
+    <td align="center">Интерфейс</td>
+    <td align="center">IPv4/IPv6</td>
+    <td align="center" >Маска/Префикс</td>
+  </tr>
+  <tr>
+    <td align="center" rowspan="2">GRE</td>
+    <td align="center">HQ-RTR</td>
+    <td align="center">tunnel.0</td>
+    <td align="center">172.16.0.1</td>
+    <td align="center">/30</td>
+  </tr>
+  <tr>
+    <td align="center" rowspan="2">GRE</td>
+    <td align="center">BR-RTR</td>
+    <td align="center">tunnel.0</td>
+    <td align="center">172.16.0.2</td>
+    <td align="center">/30</td>
+  </tr>
+  
 #### Создание туннеля на HQ-RTR
 
 Создаем интерфейс **GRE**-туннеля на **HQ-RTR**, назначаем ему IP-адрес и выставляем mtu. Генерируем туннель:
