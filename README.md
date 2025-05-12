@@ -1047,38 +1047,3 @@ wr mem
 </details>
 
 <br/>
-
-## Задание 10
-
-### Настройте часовой пояс на всех устройствах, согласно месту проведения экзамена
-
-<br/>
-
-<details>
-<summary>Решение</summary>
-<br/>
-
-#### Настройка часового пояса на Alt Linux
-
-Меняем часовой пояс и проверяем его:
-```yml
-timedatectl set-timezone Asia/Yekaterinburg
-timedatectl status
-```
-
-<br/>
-
-#### Настройка часового пояса на EcoRouter
-
-Прописываем команды для установки времени и проверки:
-```yml
-conf
-ntp timezone utc+5
-do show ntp timezone
-end
-wr mem
-```
-
-</details>
-
-<br/>
