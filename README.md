@@ -202,20 +202,20 @@ CONFIG_IPV4=yes
 ```
 
 ```yml
-echo "BOOTPROTO=static" > /etc/net/ifaces/ens33/options
-echo "TYPE=eth" >> /etc/net/ifaces/ens33/options
-echo "CONFIG_WIRELESS=no" >> /etc/net/ifaces/ens33/options
-echo "SYSTEMD_BOOTPROTO=static" >> /etc/net/ifaces/ens33/options
-echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens33/options
-echo "DISABLED=no" >> /etc/net/ifaces/ens33/options
-echo "NM_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
-echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
+echo "BOOTPROTO=static" > /etc/net/ifaces/ens18/options
+echo "TYPE=eth" >> /etc/net/ifaces/ens18/options
+echo "CONFIG_WIRELESS=no" >> /etc/net/ifaces/ens18/options
+echo "SYSTEMD_BOOTPROTO=static" >> /etc/net/ifaces/ens18/options
+echo "CONFIG_IPV4=yes" >> /etc/net/ifaces/ens18/options
+echo "DISABLED=no" >> /etc/net/ifaces/ens18/options
+echo "NM_CONTROLLED=no" >> /etc/net/ifaces/ens18/options
+echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens18/options
 ```
 > **`options`**
 
 
 ```yml
-192.168.100.62/26
+echo "192.168.100.62/26" > /etc/net/ifaces/ens18/ipv4address
 ```
 
 ```yml
@@ -225,7 +225,7 @@ echo "<ip-адрес/маска>" > /etc/net/ifaces/ens18/ipv4address
 
 
 ```yml
-default via 192.168.100.1
+echo "default via 192.168.100.1" > /etc/net/ifaces/ens18/ipv4route
 ```
 
 ```yml
@@ -309,12 +309,18 @@ ip route 0.0.0.0 0.0.0.0 *адрес шлюза*
 ```
 HQ-RTR
 ```yml
+conf
 ip route 0.0.0.0 0.0.0.0 172.16.4.1
+ex
+wr mem
 ```
 
 BR-RTR
 ```yml
+conf
 ip route 0.0.0.0 0.0.0.0 172.16.5.1
+ex
+wr mem
 ```
 </details>
 
@@ -550,6 +556,7 @@ ip mtu 1400
 ip tunnel 172.16.5.2 172.16.4.2 mode gre
 end
 wr mem
+ping 172.16.0.1
 ```
 > При создании туннеля сначала прописывается интерфейс для туннеля самого устройства.
 
