@@ -219,7 +219,7 @@ echo "SYSTEMD_CONTROLLED=no" >> /etc/net/ifaces/ens33/options
 ```
 
 ```yml
-echo "<ip-адрес/маска>" > /etc/net/ifaces/ens33/ipv4address
+echo "<ip-адрес/маска>" > /etc/net/ifaces/ens18/ipv4address
 ```
 > **`ipv4address`**
 
@@ -229,7 +229,7 @@ default via 192.168.100.1
 ```
 
 ```yml
-echo "default via <адрес шлюза>" > /etc/net/ifaces/ens33/ipv4route
+echo "default via <адрес шлюза>" > /etc/net/ifaces/ens18/ipv4route
 ```
 > **`ipv4route`**
 
@@ -388,7 +388,9 @@ iptables-save -f /etc/sysconfig/iptables
 #### Включение маршрутизации
 В файле **`/etc/net/sysctl.conf`**изменяем строку (0 меняем на 1):
 ```yml
-mcedit /etc/net/sysctl.conf
+apt-get update
+apt-get install -y nano
+nano /etc/net/sysctl.conf
 ```
 ```yml
 net.ipv4.ip_forward = 1
@@ -843,6 +845,10 @@ apt-get install -y bind bind-utils
 ```
 
 **Настраиваем файл `/etc/bind/options.conf` на HQ-SRV**
+```yml
+nano /etc/bind/options.conf
+```
+
 ```bash
 listen-on {127.0.0.1; any; };
 listen-on-v6 { ::1; };
@@ -851,7 +857,7 @@ forwarders { 8.8.8.8; };
 
 allow-query { any; };
 
-allow-query-cache { localnets; };
+allow-query-cache { any; };
 
 allow-recursion { any; };
 ```
@@ -866,6 +872,10 @@ systemctl restart network
 
 **Прописываем зоны, в файле `/etc/bind/local.conf`**
 ```yml
+nano /etc/bind/local.conf
+```
+
+```yml
 zone "au-team.irpo" {
   type master;
   file "au-team.irpo";
@@ -879,6 +889,10 @@ zone "168.192.in-addr.arpa" {
 
 
 **Копируем файл `cp -r /etc/bind/zone/localdomain /etc/bind/zone/au-team.irpo` и редактируем прямую зону**
+```yml
+nano /etc/bind/zone/au-team.irpo
+```
+
 ```bash
 $TTL	1D
 @  IN	SOA	au-team.irpo. root.au-team.irpo. (
@@ -895,11 +909,15 @@ hq-rtr	IN	A	192.168.200.1
 hq-rtr	IN	A	192.168.99.1
 br-rtr	IN	A	192.168.0.1
 hq-cli	IN	A	192.168.200.2
-br-rtr	IN	A	192.168.0.2
+br-srv	IN	A	192.168.0.2
 moodle	IN	CNAME	hq-rtr
 wiki	IN	CNAME	hq-rtr
 ```
 **Копируем файл `cp -r /etc/bind/zone/127.in-addr.arpa  /etc/bind/zone/168.192.in-addr.arpa` и редактируем обратную зону**
+```yml
+nano /etc/bind/zone/168.192.in-addr.arpa
+```
+
 ```bash
 $TTL	1D
 @	IN	SOA	au-team.irpo. root.au-team.irpo. (
@@ -941,7 +959,12 @@ rndc-confgen > /etc/rndckey
 systemctl restart network
 systemctl restart bind
 ```
-
+**На BR-SRV прописываем:**
+```yml
+echo "domain au-team.irpo" > /etc/net/ifaces/ens18/resolv.conf
+echo "nameserver 192.168.100.2" >> /etc/net/ifaces/ens18/resolv.conf
+systemctl restart network
+```
 **Проверка осуществляется с помощью команды:**
 ```yml
 nslookup moodle
