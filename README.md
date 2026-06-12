@@ -4,6 +4,6 @@
 *А ещё обязательно посмотрите табы во втором модуле fstab!!*
 
 ### Ссылки на решение
-- Модуль 1 - Модуль_1.md
-- Модуль 2 - Модуль_2.md
+- [Модуль 1](https://github.com/demom99/demoexam2025/blob/main/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_1.md)
+- [Модуль 2](https://github.com/demom99/demoexam2025/blob/main/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_2.md)
 - Модуль 3 - пока не решено. 
