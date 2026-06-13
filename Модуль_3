@@ -1,0 +1,67 @@
+# *demoexam 2026*
+![image](https://github.com/Demomen-saveTF2/SA1-22demo2025/blob/main/topology.png)
+## Задание 1
+
+### Выполните импорт пользователей в домен au-team.irpo:
+
+- В качестве файла источника выберите файл users.csv располагающийся в образе Additional.iso
+
+- Пользователи должны быть импортированы со своими паролями и другими атрибутами
+
+- Убедитесь, что импортированные пользователи могут войти на машину HQ-CLI
+
+<br/>
+
+<details>
+<summary>Решение</summary>
+<br/>
+
+#### Импорт пользователей
+Монтируем образ Additional.iso и импортируем пользователей в файл `users_fix.csv`, пропустив неисправные данные.
+```yml
+mount -o loop /dev/sr0 /mnt/ -v
+ls -l /mnt/
+iconv -f UTF-8 -t UTF-8//IGNORE /mnt/Users.csv > /root/users_fix.csv
+```
+
+Создаем баш-скрипт для импорта пользователей в самба.
+```yml
+cat << "EOF" > import.sh
+#!/bin/bash 
+#
+while IFS=';' read -r  name fam role phone ou street zip city country pass; do 
+    username="$fam"."${name:0:1}" 
+    samba-tool user create "${username,,}" "P@ssw0rd1" --given-name="$fam" --
+surname="$name" --job-title="$role" --telephone-number="$phone" 
+    [[ -n "$ou" ]] && samba-tool ou create "OU=$ou" 2>/dev/null 
+    [[ -n "$ou" ]] && samba-tool user move "${username,,}" "OU=$ou" 2>/dev/null 
+done < users_fix.csv 
+EOF
+```
+
+Запускаем скрипт, он будет работать долго
+```yml
+bash import.sh
+```
+
+Для просмотра импортированных пользователей введем команду:
+```yml
+samba-tool user list
+```
+
+Для просмотра конкретного пользователя:
+```yml
+samba-tool user show <имя пользователя>
+```
+
+После импорта переходим на HQ-CLI и заходим под любым пользователем, вводим пароль **P@ssw0rd1**
+
+
+
+
+
+
+
+
+
+
