@@ -3,7 +3,13 @@
 
 *А ещё обязательно посмотрите табы во втором модуле fstab!!*
 
-### Ссылки на решение
+### Ссылки на решение в этом репо
 - [Модуль 1](https://github.com/demom99/demoexam2025/blob/main/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_1.md)
 - [Модуль 2](https://github.com/demom99/demoexam2025/blob/main/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_2.md)
 - [Модуль 3](https://github.com/demom99/demoexam2025/blob/main/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_3.md) - нулевая гарантия на успешное выполнение представленных заданий
+
+
+**Далее представлены материалы, откуда я в основном брала для второго и третьего модуля, решния лежат на яндекс диске:**  
+- [МОДУЛЬ 1](https://disk.yandex.ru/d/E4lq6ue50RuVaw)  
+- [МОДУЛЬ 2](https://disk.yandex.ru/d/Gu1S-4xN2sL1sw)  
+- [МОДУЛЬ 3](https://disk.yandex.ru/d/HWbqP13wJMS30w)
